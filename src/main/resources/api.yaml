@@ -589,6 +589,7 @@ components:
         body:
           type: string
     GenericErrorModel:
+      x-class-extra-annotation: "@lombok.Builder"
       required:
         - errors
       type: object
