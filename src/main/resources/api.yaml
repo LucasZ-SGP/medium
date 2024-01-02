@@ -433,6 +433,7 @@ components:
           type: string
           format: password
     NewUser:
+      x-class-extra-annotation: "@lombok.Builder"
       required:
         - email
         - password
@@ -447,7 +448,7 @@ components:
           type: string
           format: password
     User:
-      x-class-extra-annotation: "@jakarta.persistence.Entity @lombok.Builder @jakarta.persistence.Table(name = \"users\")"
+      x-class-extra-annotation: "@lombok.Builder"
       required:
         - bio
         - email
@@ -457,7 +458,6 @@ components:
       type: object
       properties:
         email:
-          x-field-extra-annotation: "@jakarta.persistence.Id"
           type: string
         token:
           type: string
