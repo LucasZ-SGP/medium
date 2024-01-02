@@ -1,5 +1,5 @@
 /* (C)2024 */
-package io.github.LucasZSGP.medium.user.security;
+package io.github.LucasZSGP.medium.common.security;
 
 import io.github.LucasZSGP.medium.common.utils.JwtUtils;
 import jakarta.servlet.FilterChain;

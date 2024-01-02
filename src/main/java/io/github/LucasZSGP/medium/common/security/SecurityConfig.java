@@ -1,5 +1,5 @@
 /* (C)2024 */
-package io.github.LucasZSGP.medium.user.security;
+package io.github.LucasZSGP.medium.common.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
