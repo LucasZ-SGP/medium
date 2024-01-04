@@ -433,6 +433,7 @@ components:
           type: string
           format: password
     NewUser:
+      x-class-extra-annotation: "@lombok.Builder"
       required:
         - email
         - password
@@ -447,6 +448,7 @@ components:
           type: string
           format: password
     User:
+      x-class-extra-annotation: "@lombok.Builder"
       required:
         - bio
         - email
@@ -587,6 +589,7 @@ components:
         body:
           type: string
     GenericErrorModel:
+      x-class-extra-annotation: "@lombok.Builder"
       required:
         - errors
       type: object
