@@ -2,12 +2,12 @@
 package io.github.LucasZSGP.medium.user;
 
 import io.github.LucasZSGP.medium.common.exception.UserException;
-import java.util.List;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.openapitools.model.LoginUser;
 import org.openapitools.model.NewUser;
+import org.openapitools.model.UpdateCurrentUserRequest;
 import org.openapitools.model.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,9 +17,8 @@ public class UserService {
 
     public User createUser(NewUser newUser) {
         // todo: input validation
-        Optional<UserEntity> existingUserEntity =
-                userRepository.findByEmail(newUser.getEmail()).stream().findFirst();
-        if (existingUserEntity.isPresent()) {
+        UserEntity existingUserEntity = userRepository.findByEmail(newUser.getEmail());
+        if (existingUserEntity != null) {
             throw new UserException("User already exists");
         }
         UserEntity userEntity =
@@ -36,24 +35,43 @@ public class UserService {
 
     public User login(LoginUser loginUser) {
         // todo: input validation
-        List<UserEntity> userEntity = userRepository.findByEmail(loginUser.getEmail());
-        if (!userEntity.isEmpty()
-                && userEntity.get(0).getPassword().equals(loginUser.getPassword())) {
-            return userEntity.get(0).toUserWithNewToken();
+        UserEntity userEntity = userRepository.findByEmail(loginUser.getEmail());
+        if (userEntity != null && userEntity.getPassword().equals(loginUser.getPassword())) {
+            return userEntity.toUserWithNewToken();
         }
         throw new UserException("Invalid Credentials");
     }
 
-    //    @Override
-    //    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    //        List<UserEntity> userEntityList = userRepository.findByEmail(email);
-    //        if (userEntityList.isEmpty()) {
-    //            throw new UsernameNotFoundException(
-    //                    "User details not found for user with email: " + email);
-    //        }
-    //        return new org.springframework.security.core.userdetails.User(
-    //                userEntityList.get(0).getEmail(),
-    //                userEntityList.get(0).getPassword(),
-    //                List.of(new SimpleGrantedAuthority("User")));
-    //    }
+    public UserEntity getCurrentUserEntity() {
+        UserEntity incompleteUserEntity =
+                (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findByEmail(incompleteUserEntity.getEmail());
+    }
+
+    public User updateCurrentUser(UpdateCurrentUserRequest request) {
+        // todo: input validation
+        UserEntity currentUserEntity = getCurrentUserEntity();
+        UserEntity newUserEntity =
+                UserEntity.builder()
+                        .id(currentUserEntity.getId())
+                        .bio(
+                                request.getUser().getBio() == null
+                                        ? currentUserEntity.getBio()
+                                        : request.getUser().getBio())
+                        .password(
+                                request.getUser().getPassword() == null
+                                        ? currentUserEntity.getPassword()
+                                        : request.getUser().getPassword())
+                        .username(
+                                request.getUser().getUsername() == null
+                                        ? currentUserEntity.getUsername()
+                                        : request.getUser().getUsername())
+                        .image(
+                                request.getUser().getImage() == null
+                                        ? currentUserEntity.getImage()
+                                        : request.getUser().getImage())
+                        .build();
+        userRepository.save(newUserEntity);
+        return newUserEntity.toUserWithNewToken();
+    }
 }

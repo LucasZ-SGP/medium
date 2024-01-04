@@ -18,12 +18,16 @@ public class UserController implements UsersApi, UserApi {
 
     @Override
     public ResponseEntity<Login200Response> getCurrentUser() {
-        return UserApi.super.getCurrentUser();
+        User user = userService.getCurrentUserEntity().toUserWithNewToken();
+        Login200Response response = new Login200Response(user);
+        return ResponseEntity.status(200).body(response);
     }
 
     @Override
-    public ResponseEntity<Login200Response> updateCurrentUser(UpdateCurrentUserRequest body) {
-        return UserApi.super.updateCurrentUser(body);
+    public ResponseEntity<Login200Response> updateCurrentUser(UpdateCurrentUserRequest request) {
+        User user = userService.updateCurrentUser(request);
+        Login200Response response = new Login200Response(user);
+        return ResponseEntity.status(200).body(response);
     }
 
     @Override
@@ -40,12 +44,6 @@ public class UserController implements UsersApi, UserApi {
 
     @Override
     public ResponseEntity<Login200Response> login(LoginRequest body) {
-        //        Authentication token = new
-        // UsernamePasswordAuthenticationToken(body.getUser().getEmail(),
-        // body.getUser().getPassword());
-        //        Authentication authentication = authenticationManager.authenticate(token);
-        //        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         Login200Response response = new Login200Response(userService.login(body.getUser()));
         return ResponseEntity.status(200).body(response);
     }

@@ -4,6 +4,7 @@ package io.github.LucasZSGP.medium.common.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -13,13 +14,37 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf((csrf) -> csrf.disable());
         http.authorizeHttpRequests(
-                (requests) ->
-                        requests.requestMatchers("/test", "/users", "/users/login")
+                (authz) ->
+                        authz.requestMatchers(
+                                        "/test",
+                                        "/users",
+                                        "/users/login",
+                                        "/tags",
+                                        "/profiles/{username}")
                                 .permitAll()
-                                .requestMatchers("/test2")
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/articles/{slug}/comments",
+                                        "/articles/{slug}",
+                                        "/articles")
+                                .permitAll()
+                                .requestMatchers(
+                                        "/test2",
+                                        "/user",
+                                        "/articles/{slug}/comments/{id}",
+                                        "/profiles/{username}/follow",
+                                        "/articles/feed",
+                                        "/articles/{slug}/favorite")
+                                .authenticated()
+                                .requestMatchers(
+                                        HttpMethod.POST, "/articles", "/articles/{slug}/comments")
+                                .authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/articles/{slug}")
+                                .authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/articles/{slug}")
                                 .authenticated());
         http.addFilterBefore(
                 new JWTTokenValidatorFilter(), UsernamePasswordAuthenticationFilter.class);
