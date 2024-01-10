@@ -1,7 +1,9 @@
 /* (C)2024 */
-package io.github.LucasZSGP.medium.user;
+package io.github.LucasZSGP.medium.web;
 
 import java.util.Optional;
+
+import io.github.LucasZSGP.medium.application.UserService;
 import lombok.AllArgsConstructor;
 import org.openapitools.api.UserApi;
 import org.openapitools.api.UsersApi;

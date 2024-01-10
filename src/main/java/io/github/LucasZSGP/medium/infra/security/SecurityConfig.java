@@ -1,5 +1,7 @@
 /* (C)2024 */
-package io.github.LucasZSGP.medium.common.security;
+package io.github.LucasZSGP.medium.infra.security;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -45,7 +47,16 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/articles/{slug}")
                                 .authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/articles/{slug}")
-                                .authenticated());
+                                .authenticated()
+                                .anyRequest()
+                                .permitAll());
+        http.headers(
+                (headers) ->
+                        headers.contentTypeOptions(withDefaults())
+                                .xssProtection(withDefaults())
+                                .cacheControl(withDefaults())
+                                .httpStrictTransportSecurity(withDefaults())
+                                .frameOptions((frameOptions) -> frameOptions.disable()));
         http.addFilterBefore(
                 new JWTTokenValidatorFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

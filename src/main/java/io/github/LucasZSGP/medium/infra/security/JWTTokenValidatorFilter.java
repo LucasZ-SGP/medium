@@ -1,7 +1,7 @@
 /* (C)2024 */
-package io.github.LucasZSGP.medium.common.security;
+package io.github.LucasZSGP.medium.infra.security;
 
-import io.github.LucasZSGP.medium.common.utils.JwtUtils;
+import io.github.LucasZSGP.medium.infra.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

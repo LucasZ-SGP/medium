@@ -1,7 +1,7 @@
 /* (C)2023 */
 package io.github.LucasZSGP.medium;
 
-import io.github.LucasZSGP.medium.common.utils.JwtUtils;
+import io.github.LucasZSGP.medium.infra.utils.JwtUtils;
 import org.junit.jupiter.api.Test;
 import org.openapitools.model.NewUser;
 

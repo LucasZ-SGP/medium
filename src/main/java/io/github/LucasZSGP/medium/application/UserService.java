@@ -1,12 +1,15 @@
 /* (C)2023-2024 */
-package io.github.LucasZSGP.medium.user;
+package io.github.LucasZSGP.medium.application;
 
-import io.github.LucasZSGP.medium.common.exception.UserException;
+import io.github.LucasZSGP.medium.infra.exception.UserException;
+import io.github.LucasZSGP.medium.domain.user.UserEntity;
+import io.github.LucasZSGP.medium.domain.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.openapitools.model.LoginUser;
 import org.openapitools.model.NewUser;
 import org.openapitools.model.UpdateCurrentUserRequest;
 import org.openapitools.model.User;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +46,9 @@ public class UserService {
     }
 
     public UserEntity getCurrentUserEntity() {
-        UserEntity incompleteUserEntity =
-                (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) return null;
+        UserEntity incompleteUserEntity = (UserEntity) authentication.getPrincipal();
         return userRepository.findByEmail(incompleteUserEntity.getEmail());
     }
 

@@ -481,6 +481,7 @@ components:
         image:
           type: string
     Profile:
+      x-class-extra-annotation: "@lombok.Builder"
       required:
         - bio
         - following

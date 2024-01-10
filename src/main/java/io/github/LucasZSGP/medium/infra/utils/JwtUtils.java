@@ -1,11 +1,11 @@
 /* (C)2023-2024 */
-package io.github.LucasZSGP.medium.common.utils;
+package io.github.LucasZSGP.medium.infra.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import io.github.LucasZSGP.medium.common.exception.UserException;
+import io.github.LucasZSGP.medium.infra.exception.UserException;
 import java.time.Instant;
 import java.util.Map;
 

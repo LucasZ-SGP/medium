@@ -1,5 +1,5 @@
 /* (C)2023 */
-package io.github.LucasZSGP.medium.common.exception;
+package io.github.LucasZSGP.medium.infra.exception;
 
 import java.util.List;
 import org.openapitools.model.GenericErrorModel;
