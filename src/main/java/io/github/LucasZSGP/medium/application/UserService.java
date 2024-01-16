@@ -1,9 +1,9 @@
 /* (C)2023-2024 */
 package io.github.LucasZSGP.medium.application;
 
-import io.github.LucasZSGP.medium.infra.exception.UserException;
 import io.github.LucasZSGP.medium.domain.user.UserEntity;
 import io.github.LucasZSGP.medium.domain.user.UserRepository;
+import io.github.LucasZSGP.medium.infra.exception.UserException;
 import lombok.AllArgsConstructor;
 import org.openapitools.model.LoginUser;
 import org.openapitools.model.NewUser;
@@ -48,8 +48,8 @@ public class UserService {
     public UserEntity getCurrentUserEntity() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) return null;
-        UserEntity incompleteUserEntity = (UserEntity) authentication.getPrincipal();
-        return userRepository.findByEmail(incompleteUserEntity.getEmail());
+        String email = (String) authentication.getPrincipal();
+        return userRepository.findByEmail(email);
     }
 
     public User updateCurrentUser(UpdateCurrentUserRequest request) {

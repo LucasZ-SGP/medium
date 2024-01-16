@@ -1,13 +1,13 @@
+/* (C)2024 */
 package io.github.LucasZSGP.medium.domain;
 
 import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -16,11 +16,9 @@ import java.time.OffsetDateTime;
 public class Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private int id;
 
-    @CreatedDate
-    private OffsetDateTime createdAt;
-    @LastModifiedDate
-    private OffsetDateTime updatedAt;
-
+    @CreatedDate private OffsetDateTime createdAt = OffsetDateTime.now();
+    @LastModifiedDate private OffsetDateTime updatedAt = OffsetDateTime.now();
+    ;
 }

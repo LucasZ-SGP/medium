@@ -498,6 +498,7 @@ components:
         following:
           type: boolean
     Article:
+      x-class-extra-annotation: "@lombok.Builder"
       required:
         - author
         - body
@@ -562,6 +563,7 @@ components:
         body:
           type: string
     Comment:
+      x-class-extra-annotation: "@lombok.Builder"
       required:
         - author
         - body

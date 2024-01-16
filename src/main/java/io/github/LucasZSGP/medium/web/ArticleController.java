@@ -1,29 +1,40 @@
+/* (C)2024 */
 package io.github.LucasZSGP.medium.web;
 
+import io.github.LucasZSGP.medium.application.ArticleService;
+import io.github.LucasZSGP.medium.domain.article.CommentEntity;
+import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.openapitools.api.ArticlesApi;
 import org.openapitools.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import java.util.Optional;
-
 @RestController
+@AllArgsConstructor
 public class ArticleController implements ArticlesApi {
+    private final ArticleService articleService;
+
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return ArticlesApi.super.getRequest();
     }
 
-
     @Override
     public ResponseEntity<CreateArticle201Response> createArticle(CreateArticleRequest article) {
-        return ArticlesApi.super.createArticle(article);
+        CreateArticle201Response createArticle201Response =
+                new CreateArticle201Response(articleService.createArticle(article.getArticle()));
+        return ResponseEntity.status(201).body(createArticle201Response);
     }
 
     @Override
-    public ResponseEntity<CreateArticleComment200Response> createArticleComment(String slug, CreateArticleCommentRequest comment) {
-        return ArticlesApi.super.createArticleComment(slug, comment);
+    public ResponseEntity<CreateArticleComment200Response> createArticleComment(
+            String slug, CreateArticleCommentRequest comment) {
+        CommentEntity commentEntity =
+                articleService.createArticleComment(slug, comment.getComment());
+        return ResponseEntity.status(201)
+                .body(new CreateArticleComment200Response(commentEntity.toComment()));
     }
 
     @Override
@@ -33,7 +44,8 @@ public class ArticleController implements ArticlesApi {
 
     @Override
     public ResponseEntity<Void> deleteArticle(String slug) {
-        return ArticlesApi.super.deleteArticle(slug);
+        articleService.deleteArticle(slug);
+        return ResponseEntity.status(200).build();
     }
 
     @Override
@@ -57,17 +69,23 @@ public class ArticleController implements ArticlesApi {
     }
 
     @Override
-    public ResponseEntity<GetArticlesFeed200Response> getArticles(String tag, String author, String favorited, Integer offset, Integer limit) {
+    public ResponseEntity<GetArticlesFeed200Response> getArticles(
+            String tag, String author, String favorited, Integer offset, Integer limit) {
         return ArticlesApi.super.getArticles(tag, author, favorited, offset, limit);
     }
 
     @Override
-    public ResponseEntity<GetArticlesFeed200Response> getArticlesFeed(Integer offset, Integer limit) {
+    public ResponseEntity<GetArticlesFeed200Response> getArticlesFeed(
+            Integer offset, Integer limit) {
         return ArticlesApi.super.getArticlesFeed(offset, limit);
     }
 
     @Override
-    public ResponseEntity<CreateArticle201Response> updateArticle(String slug, UpdateArticleRequest article) {
-        return ArticlesApi.super.updateArticle(slug, article);
+    public ResponseEntity<CreateArticle201Response> updateArticle(
+            String slug, UpdateArticleRequest article) {
+        CreateArticle201Response createArticle201Response =
+                new CreateArticle201Response(
+                        articleService.updateArticle(slug, article.getArticle()).toArticle());
+        return ResponseEntity.status(201).body(createArticle201Response);
     }
 }

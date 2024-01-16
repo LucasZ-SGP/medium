@@ -5,6 +5,7 @@ import io.github.LucasZSGP.medium.domain.Auditable;
 import io.github.LucasZSGP.medium.domain.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.openapitools.model.Comment;
 
 @Entity
 @Builder
@@ -15,10 +16,11 @@ import lombok.*;
 public class CommentEntity extends Auditable {
     private String body;
 
-    @ManyToOne
-    private UserEntity user;
+    @ManyToOne private UserEntity user;
 
-    @ManyToOne
-    private ArticleEntity articleEntity;
+    @ManyToOne private ArticleEntity articleEntity;
 
+    public Comment toComment() {
+        return Comment.builder().body(this.body).author(this.user.toProfile()).build();
+    }
 }

@@ -1,3 +1,4 @@
+/* (C)2024 */
 package io.github.LucasZSGP.medium.domain.article;
 
 import jakarta.persistence.*;
@@ -17,5 +18,7 @@ public class TagEntity {
     @Column(unique = true)
     private String tag;
 
-
+    public TagEntity(String tag) {
+        this.tag = tag;
+    }
 }
