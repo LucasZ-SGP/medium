@@ -5,6 +5,7 @@ import io.github.LucasZSGP.medium.domain.Auditable;
 import io.github.LucasZSGP.medium.domain.user.UserEntity;
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import lombok.*;
 import org.openapitools.model.Article;
@@ -35,7 +36,11 @@ public class ArticleEntity extends Auditable {
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})
     private Set<TagEntity> tagList;
 
-    @OneToMany private List<CommentEntity> comments;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<CommentEntity> comments;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<UserEntity> favoritedBy;
 
     public Article toArticle() {
         return Article.builder()
@@ -47,5 +52,17 @@ public class ArticleEntity extends Auditable {
                 .tagList(this.tagList.stream().map(TagEntity::getTag).toList())
                 .author(author.toProfile())
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ArticleEntity that)) return false;
+        return Objects.equals(slug, that.slug);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(slug);
     }
 }

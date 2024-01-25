@@ -1,9 +1,8 @@
 /* (C)2024 */
 package io.github.LucasZSGP.medium.web;
 
-import java.util.Optional;
-
 import io.github.LucasZSGP.medium.application.UserService;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.openapitools.api.UserApi;
 import org.openapitools.api.UsersApi;
@@ -20,7 +19,7 @@ public class UserController implements UsersApi, UserApi {
 
     @Override
     public ResponseEntity<Login200Response> getCurrentUser() {
-        User user = userService.getCurrentUserEntity().toUserWithNewToken();
+        User user = userService.getCurrentUserEntity().orElseThrow().toUserWithNewToken();
         Login200Response response = new Login200Response(user);
         return ResponseEntity.status(200).body(response);
     }

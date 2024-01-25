@@ -22,7 +22,7 @@ public class ProfileService {
         }
         Profile profile = userEntity.toProfile();
 
-        UserEntity currentUserEntity = userService.getCurrentUserEntity();
+        UserEntity currentUserEntity = userService.getCurrentUserEntity().orElseThrow();
         if (currentUserEntity != null) {
             if (currentUserEntity.getFollows().stream()
                     .anyMatch(userEntity1 -> userEntity1.getUsername().equals(username))) {
@@ -37,7 +37,7 @@ public class ProfileService {
 
     public Profile followUserByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
-        UserEntity currentUserEntity = userService.getCurrentUserEntity();
+        UserEntity currentUserEntity = userService.getCurrentUserEntity().orElseThrow();
         // will not throw error if already followed
         currentUserEntity.getFollows().add(userEntity);
         userRepository.save(currentUserEntity);
@@ -49,7 +49,7 @@ public class ProfileService {
 
     public Profile unfollowUserByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
-        UserEntity currentUserEntity = userService.getCurrentUserEntity();
+        UserEntity currentUserEntity = userService.getCurrentUserEntity().orElseThrow();
 
         // will not throw error if already followed
         currentUserEntity.getFollows().remove(userEntity);

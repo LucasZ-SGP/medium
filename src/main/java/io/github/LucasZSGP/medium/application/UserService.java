@@ -4,6 +4,7 @@ package io.github.LucasZSGP.medium.application;
 import io.github.LucasZSGP.medium.domain.user.UserEntity;
 import io.github.LucasZSGP.medium.domain.user.UserRepository;
 import io.github.LucasZSGP.medium.infra.exception.UserException;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.openapitools.model.LoginUser;
 import org.openapitools.model.NewUser;
@@ -45,16 +46,16 @@ public class UserService {
         throw new UserException("Invalid Credentials");
     }
 
-    public UserEntity getCurrentUserEntity() {
+    public Optional<UserEntity> getCurrentUserEntity() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) return null;
+        if (authentication == null) return Optional.empty();
         String email = (String) authentication.getPrincipal();
-        return userRepository.findByEmail(email);
+        return Optional.ofNullable(userRepository.findByEmail(email));
     }
 
     public User updateCurrentUser(UpdateCurrentUserRequest request) {
         // todo: input validation
-        UserEntity currentUserEntity = getCurrentUserEntity();
+        var currentUserEntity = getCurrentUserEntity().orElseThrow();
         UserEntity newUserEntity =
                 UserEntity.builder()
                         .id(currentUserEntity.getId())

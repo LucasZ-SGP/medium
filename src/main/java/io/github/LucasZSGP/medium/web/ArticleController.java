@@ -39,7 +39,14 @@ public class ArticleController implements ArticlesApi {
 
     @Override
     public ResponseEntity<CreateArticle201Response> createArticleFavorite(String slug) {
-        return ArticlesApi.super.createArticleFavorite(slug);
+        Article article = articleService.createArticleFavorite(slug);
+        return ResponseEntity.status(200).body(new CreateArticle201Response(article));
+    }
+
+    @Override
+    public ResponseEntity<CreateArticle201Response> deleteArticleFavorite(String slug) {
+        Article article = articleService.deleteArticleFavorite(slug);
+        return ResponseEntity.status(200).body(new CreateArticle201Response(article));
     }
 
     @Override
@@ -50,12 +57,8 @@ public class ArticleController implements ArticlesApi {
 
     @Override
     public ResponseEntity<Void> deleteArticleComment(String slug, Integer id) {
-        return ArticlesApi.super.deleteArticleComment(slug, id);
-    }
-
-    @Override
-    public ResponseEntity<CreateArticle201Response> deleteArticleFavorite(String slug) {
-        return ArticlesApi.super.deleteArticleFavorite(slug);
+        CommentEntity deletedArticleComment = articleService.deleteArticleComment(slug, id);
+        return ResponseEntity.status(200).build();
     }
 
     @Override
